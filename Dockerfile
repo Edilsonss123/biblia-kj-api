@@ -3,13 +3,9 @@ FROM node:18 AS build
 
 WORKDIR /app
 
-# Copia só os package.json e package-lock.json (para cache)
 COPY ./src/package*.json ./
-
-# Instala dependências
 RUN npm install
 
-# Copia o restante do código fonte
 COPY ./src .
 
 # Stage 2: produção
@@ -17,8 +13,12 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Copia do estágio build apenas o node_modules e o código fonte
-COPY --from=build /app .
+COPY --from=build /app/index.js .
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json .
+
+# Copia o banco de dados (se for necessário no container)
+COPY ./src/bible.db .
 
 EXPOSE 3000
 
