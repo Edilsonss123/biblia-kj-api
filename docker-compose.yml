@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  bible-api:
+    build: .
+    container_name: bible-api
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    volumes:
+      - ./src:/app
+      - /app/node_modules
+    restart: unless-stopped

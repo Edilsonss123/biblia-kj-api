@@ -1,0 +1,25 @@
+{
+  "name": "bible-api",
+  "version": "1.0.0",
+  "description": "API simples para leitura sequencial da Bíblia em SQLite",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "bible",
+    "api",
+    "sqlite",
+    "express"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
