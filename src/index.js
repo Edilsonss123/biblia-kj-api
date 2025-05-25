@@ -47,7 +47,7 @@ async function getNextVersesUntilEndOrLimit(currentId, initialChapter) {
         verses.push(verse);
         totalLength += verse.text.trim().length;
 
-        if (verse.text.trim().endsWith(".")) break;
+        if (verse.text.trim().endsWith(".") && totalLength >= 170) break;
 
         nextId++;
     }
