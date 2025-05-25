@@ -23,7 +23,7 @@ Acesse: [http://localhost:3000](http://localhost:3000)
 
 ## 📘 Endpoints da API
 
-### 🔹 `GET /next-verse/:id`
+### 🔹 `GET /:id`
 
 Retorna o versículo com `id` informado e os próximos, dependendo da configuração.
 
@@ -33,7 +33,7 @@ Retorna o versículo com `id` informado e os próximos, dependendo da configura�
 
 #### Exemplo:
 ```http
-GET /next-verse/1?findEnd=true
+GET /1?findEnd=true
 ```
 
 #### Resposta:

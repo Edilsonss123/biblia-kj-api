@@ -2,7 +2,7 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
 const db = new sqlite3.Database("./bible.db", err => {
     if (err) {
@@ -55,7 +55,7 @@ async function getNextVersesUntilEndOrLimit(currentId, initialChapter) {
         verses.push(verse);
         totalLength += verse.text.trim().length;
 
-        if (verse.text.trim().endsWith(".") || totalLength > 150) break;
+        if (verse.text.trim().endsWith(".")) break;
 
         nextId++;
     }
@@ -66,15 +66,15 @@ async function getNextVersesUntilEndOrLimit(currentId, initialChapter) {
 function buildRangeResponse(initialVerse, verses) {
     const first = initialVerse;
     const last = verses.length ? verses[verses.length - 1] : initialVerse;
-
-    const range = `${first.chapter}:${first.verse}-${last.verse}`;
+    const versiculo = first.verse == last.verse ? first.verse: `${first.verse}-${last.verse}`
+    const range = `${first.chapter}:${versiculo}`;
     const nextId = last.id + 1;
 
     return {
         book: first.book,
         chapter: first.chapter,
         chapterVerseRange: range,
-        verses: [initialVerse, ...verses].map(v => ({
+        verses: verses.map(v => ({
             verse: v.verse,
             text: v.text
         })),
@@ -82,7 +82,7 @@ function buildRangeResponse(initialVerse, verses) {
     };
 }
 
-app.get("/next-verse/:id", async (req, res) => {
+app.get("/:id", async (req, res) => {
     const currentId = Number(req.params.id);
     const findEnd = req.query.findEnd === "true";
 
@@ -96,15 +96,11 @@ app.get("/next-verse/:id", async (req, res) => {
             return res.status(404).json({ error: "Versículo inicial não encontrado" });
         }
 
-        let verses;
-
+        let verses = [initialVerse];
+        
         if (findEnd) {
             verses = await getNextVersesUntilEndOrLimit(currentId, initialVerse.chapter);
-        } else {
-            const nextVerse = await getNextVerseSimple(currentId);
-            verses = [nextVerse];
         }
-
         res.json(buildRangeResponse(initialVerse, verses));
     } catch (error) {
         const statusCode = error.message.includes("não encontrado") ? 404 : 500;
