@@ -27,16 +27,8 @@ function getVerseById(id) {
     });
 }
 
-async function getNextVerseSimple(currentId) {
-    const nextVerse = await getVerseById(currentId + 1);
-    if (!nextVerse) {
-        throw new Error("Próximo versículo não encontrado");
-    }
-    return nextVerse;
-}
-
 async function getNextVersesUntilEndOrLimit(currentId, initialChapter) {
-    let nextId = currentId + 1;
+    let nextId = currentId;
     const verses = [];
     let totalLength = 0;
 
